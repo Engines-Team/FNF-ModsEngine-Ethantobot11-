@@ -492,7 +492,16 @@ class PlayState extends MusicBeatState
 		timeTxt.visible = updateTime = showTime;
 		
 		if(ClientPrefs.data.downScroll) timeTxt.y = FlxG.height - 44;
-		if(ClientPrefs.data.timeBarType == 'Song Name') timeTxt.text = SONG.song;
+		if(ClientPrefs.data.timeBarType == 'Song Name')
+		{
+			switch (ClientPrefs.data.botplayName) {
+				case 'Normal':
+					timeTxt.text = SONG.song;
+
+				case 'None':
+					timeTxt.text = SONG.song;
+			}
+		}
 
 		timeBar = new Bar(0, timeTxt.y + (timeTxt.height / 4), 'timeBar', function() return songPercent, 0, 1);
 		timeBar.scrollFactor.set();
@@ -571,14 +580,36 @@ class PlayState extends MusicBeatState
 		updateScore(false);
 		uiGroup.add(scoreTxt);
 
-		botplayTxt = new FlxText(400, timeBar.y + 55, FlxG.width - 800, "BOTPLAY", 32);
-		botplayTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		botplayTxt.scrollFactor.set();
-		botplayTxt.borderSize = 1.25;
-		botplayTxt.visible = cpuControlled;
-		uiGroup.add(botplayTxt);
+		switch (ClientPrefs.data.botplayName) {
+			case 'Normal':
+				botplayTxt = new FlxText(400, timeBar.y + 55, FlxG.width - 800, "BOTPLAY", 32);
+				botplayTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+				botplayTxt.scrollFactor.set();
+				botplayTxt.borderSize = 1.25;
+				botplayTxt.visible = cpuControlled;
+				uiGroup.add(botplayTxt);
+			
+			case 'Song Name':
+				botplayTxt = new FlxText(400, timeBar.y + 55, FlxG.width - 800, SONG.song, 32);
+				botplayTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+				botplayTxt.scrollFactor.set();
+				botplayTxt.borderSize = 1.25;
+				botplayTxt.visible = cpuControlled;
+				uiGroup.add(botplayTxt);
+
+			case 'None':
+				botplayTxt = new FlxText(400, timeBar.y + 55, FlxG.width - 800, "", 32);
+				botplayTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+				botplayTxt.scrollFactor.set();
+				botplayTxt.borderSize = 1.25;
+				botplayTxt.visible = cpuControlled;
+				uiGroup.add(botplayTxt);
+		}
+		
 		if(ClientPrefs.data.downScroll)
+		{
 			botplayTxt.y = timeBar.y - 78;
+		}
 
 		uiGroup.cameras = [camHUD];
 		noteGroup.cameras = [camHUD];
@@ -737,14 +768,25 @@ class PlayState extends MusicBeatState
 	}
 
 	public function reloadTimeBarColor() {
-		timeBar.setColors(FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
+		if ((FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]) = 0xFF000000)) {
+			timeBar.color = 0xFFFFFFFF;
+		} else {
+			timeBar.setColors(FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
+		}
 	}
 
 	public function reloadHUDColor() {
-		timeTxt.color = (FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
-		timeBar.setColors(FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
-		scoreTxt.color = (FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
-		botplayTxt.color = (FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
+		if ((FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]) = 0xFF000000)) {
+			timeTxt.color = 0xFFFFFFFF;
+			timeBar.color = 0xFFFFFFFF;
+			scoreTxt.color = 0xFFFFFFFF;
+			botplayTxt.color = 0xFFFFFFFF;
+		} else {
+			timeTxt.color = (FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
+			timeBar.setColors(FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
+			scoreTxt.color = (FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
+			botplayTxt.color = (FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
+		}
 	}
 
 
