@@ -768,20 +768,25 @@ class PlayState extends MusicBeatState
 	}
 
 	public function reloadTimeBarColor() {
-		if (FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]) = 0xFF000000) {
+		if ((FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]) = 0xFF000000));
+		{
 			timeBar.color = 0xFFFFFFFF;
-		} else {
+		} else 
+		{
 			timeBar.setColors(FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
 		}
 	}
 
 	public function reloadHUDColor() {
-		if (FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]) = 0xFF000000) {
+		if ((FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]) = 0xFF000000));
+		{
 			timeTxt.color = 0xFFFFFFFF;
 			timeBar.color = 0xFFFFFFFF;
 			scoreTxt.color = 0xFFFFFFFF;
 			botplayTxt.color = 0xFFFFFFFF;
-		} else {
+		} 
+		else 
+		{
 			timeTxt.color = (FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
 			timeBar.setColors(FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
 			scoreTxt.color = (FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
