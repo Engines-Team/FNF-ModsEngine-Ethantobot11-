@@ -3121,6 +3121,13 @@ class PlayState extends MusicBeatState
 		super.destroy();
 	}
 
+	public static function cancelMusicFadeTween() {
+		if(FlxG.sound.music.fadeTween != null) {
+			FlxG.sound.music.fadeTween.cancel();
+		}
+		FlxG.sound.music.fadeTween = null;
+	}
+			
 	var lastStepHit:Int = -1;
 	override function stepHit()
 	{
