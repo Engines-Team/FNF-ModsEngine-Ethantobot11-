@@ -216,7 +216,7 @@ class MusicBeatState extends FlxUIState
 		curStep = lastChange.stepTime + Math.floor(shit);
 	}
 
-	public static function switchState(nextState:FlxState = null) {
+	/*public static function switchState(nextState:FlxState = null) {
 		if(nextState == null) nextState = FlxG.state;
 		if(nextState == FlxG.state)
 		{
@@ -246,7 +246,7 @@ class MusicBeatState extends FlxUIState
 			CustomFadeTransition.finishCallback = function() FlxG.resetState();
 		else
 			CustomFadeTransition.finishCallback = function() FlxG.switchState(nextState);
-	}
+	}*/
 
 	public static function getState():MusicBeatState {
 		return cast (FlxG.state, MusicBeatState);
