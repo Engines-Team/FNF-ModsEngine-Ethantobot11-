@@ -82,6 +82,7 @@ class PlayState extends MusicBeatState
 
 	public static var ratingStuff:Array<Dynamic> = [
 		['You Suck!', 0.2], //From 0% to 19%
+		['an easter egg uh?', 0.3], //idk 
 		['Shit', 0.4], //From 20% to 39%
 		['Bad', 0.5], //From 40% to 49%
 		['Bruh', 0.6], //From 50% to 59%
@@ -768,30 +769,31 @@ class PlayState extends MusicBeatState
 	}
 
 	public function reloadTimeBarColor() {
-		if (FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]) == 0xFF000000),
-		{
-			timeBar.color = 0xFFFFFFFF;
-		} else 
-		{
+		var dadColor = FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]);
+
+		if (dadColor == 0xFF000000) {
+			timeBar.setColors(0xFFFFFFFF);
+		} else {
 			timeBar.setColors(FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
 		}
 	}
 
 	public function reloadHUDColor() {
-		if (FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]) == 0xFF000000)
-		{
-			timeTxt.color = 0xFFFFFFFF;
-			timeBar.color = 0xFFFFFFFF;
-			scoreTxt.color = 0xFFFFFFFF;
-			botplayTxt.color = 0xFFFFFFFF;
-		} 
-		else 
-		{
-			timeTxt.color = (FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
-			timeBar.setColors(FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
-			scoreTxt.color = (FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
-			botplayTxt.color = (FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
-		}
+		var dadColor = FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]);
+
+    	if (dadColor == 0xFF000000) {
+        	timeTxt.color = 0xFFFFFFFF;
+        	timeBar.setColors(0xFFFFFFFF);
+        	scoreTxt.color = 0xFFFFFFFF;
+        	botplayTxt.color = 0xFFFFFFFF;
+    	} else {
+        	var hudColor = FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]);
+
+        	timeTxt.color = hudColor;
+        	timeBar.setColors(hudColor);
+        	scoreTxt.color = hudColor;
+        	botplayTxt.color = hudColor;
+    	}
 	}
 
 
