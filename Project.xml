@@ -65,12 +65,8 @@
 	<define name="NO_PRELOAD_ALL" unless="PRELOAD_ALL" />
 
 	<assets path="assets/fonts" />
-	<assets path="assets/preload" rename="assets" exclude="*.ogg" if="web" />
-	<assets path="assets/preload" rename="assets" exclude="*.mp3" unless="web" />
-	<section if="TITLE_SCREEN_EASTER_EGG">
-		<assets path="assets/secrets" rename="assets" exclude="*.ogg" if="web" />
-		<assets path="assets/secrets" rename="assets" exclude="*.mp3" unless="web" />
-	</section>
+	<assets path="assets/preload" rename="assets/shared" exclude="*.ogg" if="web" />
+	<assets path="assets/preload" rename="assets/shared" exclude="*.mp3" unless="web" />
 
 	<!-- Week Assets -->
 	<library name="videos" preload="true" />
@@ -104,7 +100,7 @@
 	<library name="songs"         preload="true" />
 	<library name="week_assets"   preload="true" />
 
-	<!--<define name="CHECK_FOR_UPDATES" if="officialBuild" />-->
+	<define name="CHECK_FOR_UPDATES" if="officialBetaBuild" />
 
 	<section if="MODS_ALLOWED">
 		<assets path='example_mods' rename='mods' embed='false'/>
