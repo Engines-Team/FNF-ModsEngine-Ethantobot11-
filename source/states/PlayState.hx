@@ -272,7 +272,62 @@ class PlayState extends MusicBeatState
 	public var luaTouchPad:TouchPad;
 	#end
 
-	var preloadTasks:Array<Void->Void> = [];
+	override public function create()
+	{
+		//trace('Playback Rate: ' + playbackRate);
+		Paths.clearStoredMemory();
+
+		startCallback = startCountdown;
+		endCallback = endSong;
+
+		// for lua
+		instance = this;
+
+		PauseSubState.songName = null; //Reset to default
+		playbackRate = ClientPrefs.getGameplaySetting('songspeed');
+
+		keysArray = [
+			'note_left',
+			'note_down',
+			'note_up',
+			'note_right'
+		];
+
+		if(FlxG.sound.music != null)
+			FlxG.sound.music.stop();
+
+		// Gameplay settings
+		healthGain = ClientPrefs.getGameplaySetting('healthgain');
+		healthLoss = ClientPrefs.getGameplaySetting('healthloss');
+		instakillOnMiss = ClientPrefs.getGameplaySetting('instakill');
+		practiceMode = ClientPrefs.getGameplaySetting('practice');
+		cpuControlled = ClientPrefs.getGameplaySetting('botplay');
+		guitarHeroSustains = ClientPrefs.data.guitarHeroSustains;
+
+		// var gameCam:FlxCamera = FlxG.camera;
+		camGame = initPsychCamera();
+		camHUD = new FlxCamera();
+		camOther = new FlxCamera();
+		luaTpadCam = new FlxCamera();
+		camHUD.bgColor.alpha = 0;
+		camOther.bgColor.alpha = 0;
+		luaTpadCam.bgColor.alpha = 0;
+
+		FlxG.cameras.add(camHUD, false);
+		FlxG.cameras.add(camOther, false);
+		FlxG.cameras.add(luaTpadCam, false);
+		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
+
+		persistentUpdate = true;
+		persistentDraw = true;
+
+		if (SONG == null)
+			SONG = Song.loadFromJson('tutorial');
+
+		Conductor.mapBPMChanges(SONG);
+		Conductor.bpm = SONG.bpm;
+
+		var preloadTasks:Array<Void->Void> = [];
 
 	preloadTasks.push(() -> {
 			// for lua
@@ -405,61 +460,6 @@ class PlayState extends MusicBeatState
 			dadGroup = new FlxSpriteGroup(DAD_X, DAD_Y);
 			gfGroup = new FlxSpriteGroup(GF_X, GF_Y);
 		});
-
-	override public function create()
-	{
-		//trace('Playback Rate: ' + playbackRate);
-		Paths.clearStoredMemory();
-
-		startCallback = startCountdown;
-		endCallback = endSong;
-
-		// for lua
-		instance = this;
-
-		PauseSubState.songName = null; //Reset to default
-		playbackRate = ClientPrefs.getGameplaySetting('songspeed');
-
-		keysArray = [
-			'note_left',
-			'note_down',
-			'note_up',
-			'note_right'
-		];
-
-		if(FlxG.sound.music != null)
-			FlxG.sound.music.stop();
-
-		// Gameplay settings
-		healthGain = ClientPrefs.getGameplaySetting('healthgain');
-		healthLoss = ClientPrefs.getGameplaySetting('healthloss');
-		instakillOnMiss = ClientPrefs.getGameplaySetting('instakill');
-		practiceMode = ClientPrefs.getGameplaySetting('practice');
-		cpuControlled = ClientPrefs.getGameplaySetting('botplay');
-		guitarHeroSustains = ClientPrefs.data.guitarHeroSustains;
-
-		// var gameCam:FlxCamera = FlxG.camera;
-		camGame = initPsychCamera();
-		camHUD = new FlxCamera();
-		camOther = new FlxCamera();
-		luaTpadCam = new FlxCamera();
-		camHUD.bgColor.alpha = 0;
-		camOther.bgColor.alpha = 0;
-		luaTpadCam.bgColor.alpha = 0;
-
-		FlxG.cameras.add(camHUD, false);
-		FlxG.cameras.add(camOther, false);
-		FlxG.cameras.add(luaTpadCam, false);
-		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
-
-		persistentUpdate = true;
-		persistentDraw = true;
-
-		if (SONG == null)
-			SONG = Song.loadFromJson('tutorial');
-
-		Conductor.mapBPMChanges(SONG);
-		Conductor.bpm = SONG.bpm;
 
 
 		#if DISCORD_ALLOWED
