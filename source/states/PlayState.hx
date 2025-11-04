@@ -272,6 +272,140 @@ class PlayState extends MusicBeatState
 	public var luaTouchPad:TouchPad;
 	#end
 
+	var preloadTasks:Array<Void->Void> = [];
+
+	preloadTasks.push(() -> {
+			// for lua
+			instance = this;
+
+			PauseSubState.songName = null; // Reset to default
+			playbackRate = ClientPrefs.getGameplaySetting('songspeed');
+			fullComboFunction = fullComboUpdate;
+
+			keysArray = ['note_left', 'note_down', 'note_up', 'note_right'];
+
+			if (FlxG.sound.music != null)
+				FlxG.sound.music.stop();
+
+			// Gameplay settings
+			healthGain = ClientPrefs.getGameplaySetting('healthgain');
+			healthLoss = ClientPrefs.getGameplaySetting('healthloss');
+			instakillOnMiss = ClientPrefs.getGameplaySetting('instakill');
+			practiceMode = ClientPrefs.getGameplaySetting('practice');
+			cpuControlled = ClientPrefs.getGameplaySetting('botplay');
+	});
+
+	preloadTasks.push(() -> {
+			grpHoldSplashes = new FlxTypedGroup<SustainSplash>();
+			grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
+
+			persistentUpdate = true;
+			persistentDraw = true;
+		});
+
+		preloadTasks.push(() -> {
+			if (SONG == null)
+				loadSong('tutorial');
+
+			Conductor.mapBPMChanges(SONG);
+			Conductor.bpm = SONG.bpm;
+
+			songId = FreeplayState.filterCharacters(PlayState.SONG.song) + "-" +
+				FreeplayState.filterCharacters(Difficulty.getString()) + "-" + 
+				FreeplayState.filterCharacters(Md5.encode(PlayState.RAW_SONG))
+			;
+
+    preloadTasks.push(() -> {
+			stageModDir = Mods.currentModDirectory; // thats a big woops 
+			oldModDir = Mods.currentModDirectory;
+
+			var swagStage = SONG.stage;
+
+			if (swagStage == null || swagStage.length < 1) {
+				swagStage = StageData.vanillaSongStage(songName);
+			}
+
+			if ((isErect || (SONG.song.endsWith(' Pico'))) && ( //sorry
+				swagStage == 'stage' ||
+				swagStage == 'spooky' ||
+				swagStage == 'philly' ||
+				swagStage == 'limo' ||
+				swagStage == 'mall' ||
+				swagStage == 'school' ||
+				swagStage == 'tank'
+			)) {
+				swagStage = swagStage + '-erect';
+			}
+			curStage = swagStage;
+
+			stageData = StageData.getStageFile(curStage);
+			if (stageData == null) { // Stage couldn't be found, create a dummy stage for preventing a crash
+				stageData = StageData.dummy();
+			}
+
+			Mods.currentModDirectory = oldModDir;
+			Paths.setCurrentLevel(stageData.directory);
+
+			defaultCamZoom = stageData.defaultZoom;
+
+			stageUI = "normal";
+			if (stageData.stageUI != null && stageData.stageUI.trim().length > 0)
+				stageUI = stageData.stageUI;
+			else {
+				if (stageData.isPixelStage)
+					stageUI = "pixel";
+			}
+
+			BF_X = stageData.boyfriend[0];
+			BF_Y = stageData.boyfriend[1];
+			GF_X = stageData.girlfriend[0];
+			GF_Y = stageData.girlfriend[1];
+			DAD_X = stageData.opponent[0];
+			DAD_Y = stageData.opponent[1];
+
+			if (stageData.camera_speed != null)
+				cameraSpeed = stageData.camera_speed;
+
+			boyfriendCameraOffset = stageData.camera_boyfriend;
+			if (boyfriendCameraOffset == null) // Fucks sake should have done it since the start :rolling_eyes:
+				boyfriendCameraOffset = [0, 0];
+
+			opponentCameraOffset = stageData.camera_opponent;
+			if (opponentCameraOffset == null)
+				opponentCameraOffset = [0, 0];
+
+			girlfriendCameraOffset = stageData.camera_girlfriend;
+			if (girlfriendCameraOffset == null)
+				girlfriendCameraOffset = [0, 0];
+		});
+
+		preloadTasks.push(() -> {
+			if(stageData != null && stageData.preload != null)
+			{
+				for (asset in Reflect.fields(stageData.preload))
+				{
+					var filters:Int = Reflect.field(stageData.preload, asset);
+					var asset:String = asset.trim();
+
+					if(filters < 0 || StageData.validateVisibility(filters))
+					{
+						if(asset.startsWith('images/'))
+							precacheList.set(asset.substr('images/'.length), 'image');
+						else if(asset.startsWith('sounds/'))
+							precacheList.set(asset.substr('sounds/'.length), 'sound');
+						else if(asset.startsWith('music/'))
+							precacheList.set(asset.substr('music/'.length), 'music');
+					}
+				}
+			}
+		});
+
+		preloadTasks.push(() -> {
+			boyfriendGroup = new FlxSpriteGroup(BF_X, BF_Y);
+			dadGroup = new FlxSpriteGroup(DAD_X, DAD_Y);
+			gfGroup = new FlxSpriteGroup(GF_X, GF_Y);
+		});
+
 	override public function create()
 	{
 		//trace('Playback Rate: ' + playbackRate);
