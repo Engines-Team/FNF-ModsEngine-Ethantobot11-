@@ -33,19 +33,19 @@ jobs:
             artifactName: MacOS
             artifactPath: export/release/macos/bin/*
           - name: Android
-            os: macos-15
+            os: ubuntu-22.04
             buildArgs: "android -final -D officialBuild"
             artifactName: Android
             artifactPath: "export/release/android/bin/app/build/outputs/apk/release/*.apk"
           - name: Android-x86-64
-            os: macos-15
+            os: ubuntu-22.04
             buildArgs: "android -final -DXCPP_X86_64 -D officialBuild"
             artifactName: Android-x86-64
             artifactPath: "export/release/android/bin/app/build/outputs/apk/release/*.apk"
           - name: Android-ARM-64
-            os: macos-15
+            os: ubuntu-22.04
             buildArgs: "android -final -DXCPP_ARM64 -D officialBuild"
-            artifactName: Android-ARM-64
+            artifactName: Android-ARM64
             artifactPath: "export/release/android/bin/app/build/outputs/apk/release/*.apk"
           - name: iOS
             os: macos-15
