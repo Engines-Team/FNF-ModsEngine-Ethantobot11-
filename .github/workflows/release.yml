@@ -16,12 +16,12 @@ jobs:
             os: windows-2022
             buildArgs: "windows -final -X64 -D HXCPP_X64 -D 64bits"
             artifactName: Windows-x64
-            artifactPath: export/64bits/release/windows/bin/*
+            artifactPath: export/release/windows/bin/*
           - name: Windows x32
             os: windows-2022
             buildArgs: "windows -final -X32 -D HXCPP_X32 -D 32bits"
             artifactName: Windows-x32
-            artifactPath: export/32bits/release/windows/bin/*
+            artifactPath: export/release/windows/bin/*
           - name: Linux
             os: ubuntu-22.04
             buildArgs: "linux -final"
@@ -36,6 +36,16 @@ jobs:
             os: macos-15
             buildArgs: "android -final -D officialBuild"
             artifactName: Android
+            artifactPath: "export/release/android/bin/app/build/outputs/apk/release/*.apk"
+          - name: Android-x86-64
+            os: macos-15
+            buildArgs: "android -final -DXCPP_X86_64 -D officialBuild"
+            artifactName: Android-x86-64
+            artifactPath: "export/release/android/bin/app/build/outputs/apk/release/*.apk"
+          - name: Android-ARM-64
+            os: macos-15
+            buildArgs: "android -final -DXCPP_ARM64 -D officialBuild"
+            artifactName: Android-ARM-64
             artifactPath: "export/release/android/bin/app/build/outputs/apk/release/*.apk"
           - name: iOS
             os: macos-15
@@ -83,7 +93,7 @@ jobs:
           name: Linux
           path: /home/runner/Linux
 
-      - name: Tar Linux Build For Release
+      - name: Zip Linux Build For Release
         run: |
           cd /home/runner/Linux
           zip -r "/home/runner/${{ env.PROJECT_NAME }}-Linux.zip" "Linux-release.zip" .
@@ -94,7 +104,7 @@ jobs:
           name: MacOS
           path: /home/runner/MacOS
 
-      - name: Tar MacOS Build For Release
+      - name: Zip MacOS Build For Release
         run: |
           cd /home/runner/MacOS
           zip -r "/home/runner/${{ env.PROJECT_NAME }}-MacOS.zip" "MacOS-release.zip" .
@@ -107,6 +117,24 @@ jobs:
 
       - name: Move Android File
         run: mv /home/runner/${{ env.PROJECT_NAME }}-release.apk /home/runner/${{ env.PROJECT_NAME }}-Android-release.apk
+
+      - name: Download Android Build
+        uses: actions/download-artifact@main
+        with:
+          name: Android-ARM-64
+          path: /home/runner
+
+      - name: Move Android File
+        run: mv /home/runner/${{ env.PROJECT_NAME }}-release.apk /home/runner/${{ env.PROJECT_NAME }}-Android-ARM64-release.apk
+
+      - name: Download Android Build
+        uses: actions/download-artifact@main
+        with:
+          name: Android-x86-64
+          path: /home/runner
+
+      - name: Move Android File
+        run: mv /home/runner/${{ env.PROJECT_NAME }}-release.apk /home/runner/${{ env.PROJECT_NAME }}-Android-x86-64-release.apk
 
       - name: Download iOS Build
         uses: actions/download-artifact@main
