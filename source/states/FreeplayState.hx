@@ -98,6 +98,13 @@ class FreeplayState extends MusicBeatState
 		add(bg);
 		bg.screenCenter();
 
+		portrait = new FlxSprite().loadGraphic(Paths.image('freeplayportraits/fresh'));
+		portrait.scale.set(0.5,0.5);
+		portrait.updateHitbox();
+		portrait.antialiasing = ClientPrefs.data.antialiasing;
+		add(portrait);
+		portrait.screenCenter(XY);
+
 		var grid:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.createGrid(80, 80, 160, 160, true, 0x33000000, 0x0));
 		grid.velocity.set(40, 40);
 		grid.alpha = 0;
@@ -667,7 +674,23 @@ class FreeplayState extends MusicBeatState
 	inline private function _updateSongLastDifficulty()
 	{
 		songs[curSelected].lastDifficulty = Difficulty.getString(curDifficulty);
+
+		if (time >= 1)
+			{
+				FlxTween.globalManager.completeTweensOf(portrait);
+				portrait.screenCenter(Y);
+	
+				FlxTween.tween(portrait, {y: portrait.y + 45}, 0.2, {ease: FlxEase.quintIn, onComplete: function(twn:FlxTween) {
+					updateportrait();
+					var mfwY = portrait.y;
+					portrait.y -= 20;
+					FlxTween.tween(portrait, {y: mfwY}, 0.4, {ease: FlxEase.elasticOut});
+				}});
+			}
+			else
+				updateportrait();
 	}
+
 
 	private function positionHighscore() {
 		scoreText.x = FlxG.width - scoreText.width - 6;
@@ -677,9 +700,16 @@ class FreeplayState extends MusicBeatState
 		diffText.x -= diffText.width / 2;
 	}
 
+	private function updateportrait() {
+		portrait.loadGraphic(Paths.image('freeplayportraits/'+songs[curSelected].songName.toLowerCase()));
+		portrait.scale.set(0.5,0.5);
+		portrait.updateHitbox();
+		portrait.screenCenter(XY);
+
+
 	var _drawDistance:Int = 4;
 	var _lastVisibles:Array<Int> = [];
-	public function updateTexts(elapsed:Float = 0.0)
+	}public function updateTexts(elapsed:Float = 0.0)
 	{
 		lerpSelected = FlxMath.lerp(curSelected, lerpSelected, Math.exp(-elapsed * 9.6));
 		for (i in _lastVisibles)
