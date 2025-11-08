@@ -38,7 +38,7 @@ import openfl.filters.ShaderFilter;
 #end
 
 #if VIDEOS_ALLOWED
-import objects.VideoSprite
+import objects.VideoSprite;
 #end
 
 import objects.Note.EventNote;
