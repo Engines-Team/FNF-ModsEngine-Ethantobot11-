@@ -131,6 +131,8 @@ class FreeplayState extends MusicBeatState
 
             add(icon);
 
+			portrait.loadGraphic(Paths.image('freeplayportraits/'+songs[i].songName.toLowerCase()));// it would be funny if this actually worked
+
         }
 		
 		WeekData.setDirectoryFromWeek();
