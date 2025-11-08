@@ -58,7 +58,7 @@ jobs:
       - name: Download Windows x64 Build
         uses: actions/download-artifact@main
         with:
-          name: Windows x64
+          name: Windows-x64
           path: /home/runner/Windows-x64
 
       - name: Zip Windows x64 Build For Release
@@ -69,7 +69,7 @@ jobs:
       - name: Download Windows x32 Build
         uses: actions/download-artifact@main
         with:
-          name: Windows x32
+          name: Windows-x32
           path: /home/runner/Windows-x32
 
       - name: Zip Windows x32 Build For Release
