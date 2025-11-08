@@ -203,7 +203,6 @@ class FreeplayState extends MusicBeatState
 		player = new MusicPlayer(this);
 		add(player);
 		
-		changeSelection();
 		updateTexts();
 
 		#if mobile
@@ -705,12 +704,19 @@ class FreeplayState extends MusicBeatState
 	}
 
 	private function updateportrait() {
-		portrait.loadGraphic(Paths.image('freeplayportraits/'+songs[curSelected].songName.toLowerCase()));
-		portrait.scale.set(0.5,0.5);
-		portrait.updateHitbox();
-		portrait.screenCenter(XY);
-	}
+    if(portrait == null || songs.length == 0) return;
 
+   	 	var curSong:String = songs[curSelected].songName.toLowerCase();
+    	var portraitPath:String = 'freeplayportraits/' + curSong;
+
+    	if (!Paths.exists(Paths.image(portraitPath)))
+      	     portraitPath = 'freeplayportraits/fresh'; // fallback
+
+  	     portrait.loadGraphic(Paths.image(portraitPath));
+    	 portrait.scale.set(0.5,0.5);
+   		 portrait.updateHitbox();
+    	 portrait.screenCenter(XY);
+   	 }
 
 	var _drawDistance:Int = 4;
 	var _lastVisibles:Array<Int> = [];
