@@ -36,19 +36,6 @@ jobs:
         with:
           haxe-version: ${{ env.HAXE_VERSION }}
 
-      - name: Restore existing build cache for faster compilation Windows
-        if: inputs.name == 'Windows'
-        uses: actions/cache@v4
-        with:
-          # not caching the bin folder to prevent asset duplication and stuff like that
-          key: cache-build-windows
-          path: |
-            .haxelib/
-            export/release/windows/haxe/
-            export/release/windows/obj/
-          restore-keys: |
-            cache-build-windows
-
       - name: Restore existing build cache for faster compilation Windows x64
         if: inputs.name == 'Windows_x64'
         uses: actions/cache@v4
@@ -57,8 +44,8 @@ jobs:
           key: cache-build-windows-x64
           path: |
             .haxelib/
-            export/release/windows//haxe/
-            export/release/windows/obj/
+            export/64bits/release/windows/haxe/
+            export/64bits/release/windows/obj/
           restore-keys: |
             cache-build-windows-x64
 
@@ -70,23 +57,10 @@ jobs:
           key: cache-build-windows-x32
           path: |
             .haxelib/
-            export/release/windows/haxe/
-            export/release/windows/obj/
+            export/32bits/release/windows//haxe/
+            export/32bits/release/windows/obj/
           restore-keys: |
             cache-build-windows-x32
-      
-      - name: Restore existing build cache for faster compilation Windows
-        if: inputs.name == 'Windows'
-        uses: actions/cache@v4
-        with:
-          # not caching the bin folder to prevent asset duplication and stuff like that
-          key: cache-build-windows-x64
-          path: |
-            .haxelib/
-            export/release/windows/haxe/
-            export/release/windows/obj/
-          restore-keys: |
-            cache-build-windows-x64
       
       - name: Restore existing build cache for faster compilation
         if: inputs.name == 'Linux'
@@ -153,27 +127,6 @@ jobs:
         run: |
           haxelib install hmm --quiet
           haxelib run hmm install --quiet
-
-      - name: Clearing already existing cache Windows
-        if: inputs.name == 'Windows'
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const caches = await github.rest.actions.getActionsCacheList({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-            })
-            for (const cache of caches.data.actions_caches) {
-              if (cache.key == "cache-build-windows") {
-                console.log('Clearing ' + cache.key + '...')
-                await github.rest.actions.deleteActionsCacheById({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  cache_id: cache.id,
-                })
-                console.log("Cache cleared.")
-              }
-            }
 
       - name: Clearing already existing cache Windows x64
         if: inputs.name == 'Windows_x64'
@@ -326,19 +279,6 @@ jobs:
           name: ${{ inputs.artifactName }}
           path: ${{ inputs.artifactPath }}
           if-no-files-found: error
-      
-      - name: Uploading new cache Windows
-        if: inputs.name == 'Windows'
-        uses: actions/cache@v4
-        with:
-          # caching again since for some reason it doesnt work with the first post cache shit
-          key: cache-build-windows
-          path: |
-            .haxelib/
-            export/release/windows/haxe/
-            export/release/windows/obj/
-          restore-keys: |
-            cache-build-windows
 
       - name: Uploading new cache Windows x64
         if: inputs.name == 'Windows_x64'
@@ -348,8 +288,8 @@ jobs:
           key: cache-build-windows-x64
           path: |
             .haxelib/
-            export/release/windows/haxe/
-            export/release/windows/obj/
+            export/64bits/release/windows/haxe/
+            export/64bits/release/windows/obj/
           restore-keys: |
             cache-build-windows-x64
 
@@ -361,23 +301,10 @@ jobs:
           key: cache-build-windows-x32
           path: |
             .haxelib/
-            export/release/windows/haxe/
-            export/release/windows/obj/
+            export/32bits/release/windows/haxe/
+            export/32bits/release/windows/obj/
           restore-keys: |
             cache-build-windows-x32
-       
-      - name: Uploading new cache
-        if: inputs.name == 'Windows_x64'
-        uses: actions/cache@v4
-        with:
-          # caching again since for some reason it doesnt work with the first post cache shit
-          key: cache-build-windows-x64
-          path: |
-            .haxelib/
-            export/release/windows/haxe/
-            export/release/windows/obj/
-          restore-keys: |
-            cache-build-windows-x64
         
       - name: Uploading new cache Linux
         if: inputs.name == 'Linux'
