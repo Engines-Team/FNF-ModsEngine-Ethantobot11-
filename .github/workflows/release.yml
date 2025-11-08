@@ -42,7 +42,7 @@ jobs:
             buildArgs: "android -final -DXCPP_X86_64 -D officialBuild"
             artifactName: Android-x86-64
             artifactPath: "export/release/android/bin/app/build/outputs/apk/release/*.apk"
-          - name: Android-ARM-64
+          - name: Android-ARM64
             os: ubuntu-22.04
             buildArgs: "android -final -DXCPP_ARM64 -D officialBuild"
             artifactName: Android-ARM64
