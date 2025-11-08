@@ -44,8 +44,8 @@ jobs:
           key: cache-build-windows-x64
           path: |
             .haxelib/
-            export/64bits/release/windows/haxe/
-            export/64bits/release/windows/obj/
+            export/release/windows/haxe/
+            export/release/windows/obj/
           restore-keys: |
             cache-build-windows-x64
 
@@ -57,8 +57,8 @@ jobs:
           key: cache-build-windows-x32
           path: |
             .haxelib/
-            export/32bits/release/windows/haxe/
-            export/32bits/release/windows/obj/
+            export/release/windows/haxe/
+            export/release/windows/obj/
           restore-keys: |
             cache-build-windows-x32
       
@@ -288,8 +288,8 @@ jobs:
           key: cache-build-windows-x64
           path: |
             .haxelib/
-            export/64bits/release/windows/haxe/
-            export/64bits/release/windows/obj/
+            export/release/windows/haxe/
+            export/release/windows/obj/
           restore-keys: |
             cache-build-windows-x64
 
@@ -301,8 +301,8 @@ jobs:
           key: cache-build-windows-x32
           path: |
             .haxelib/
-            export/32bits/release/windows/haxe/
-            export/32bits/release/windows/obj/
+            export/release/windows/haxe/
+            export/release/windows/obj/
           restore-keys: |
             cache-build-windows-x32
         
