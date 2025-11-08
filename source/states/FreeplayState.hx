@@ -705,11 +705,12 @@ class FreeplayState extends MusicBeatState
 		portrait.scale.set(0.5,0.5);
 		portrait.updateHitbox();
 		portrait.screenCenter(XY);
+	}
 
 
 	var _drawDistance:Int = 4;
 	var _lastVisibles:Array<Int> = [];
-	}public function updateTexts(elapsed:Float = 0.0)
+	public function updateTexts(elapsed:Float = 0.0)
 	{
 		lerpSelected = FlxMath.lerp(curSelected, lerpSelected, Math.exp(-elapsed * 9.6));
 		for (i in _lastVisibles)
