@@ -105,6 +105,14 @@ class FreeplayState extends MusicBeatState
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
 
+		portrait = new FlxSprite().loadGraphic(Paths.image('freeplayportraits/fresh'));
+		portrait.scale.set(0.5,0.5);
+		portrait.updateHitbox();
+		portrait.antialiasing = ClientPrefs.data.antialiasing;
+		add(portrait);
+		portrait.screenCenter(XY);
+
+
 		for (i in 0...songs.length)
 		{
 			var songText:Alphabet = new Alphabet(90, 320, songs[i].songName, true);
@@ -162,6 +170,9 @@ class FreeplayState extends MusicBeatState
 		lerpSelected = curSelected;
 
 		curDifficulty = Math.round(Math.max(0, Difficulty.defaultList.indexOf(lastDifficultyName)));
+
+		changeSelection();
+		updateportrait();
 
 		bottomBG = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
 		bottomBG.alpha = 0.6;
@@ -660,7 +671,23 @@ class FreeplayState extends MusicBeatState
 	inline private function _updateSongLastDifficulty()
 	{
 		songs[curSelected].lastDifficulty = Difficulty.getString(curDifficulty);
+
+		if (time >= 1)
+			{
+				FlxTween.globalManager.completeTweensOf(portrait);
+				portrait.screenCenter(Y);
+	
+				FlxTween.tween(portrait, {y: portrait.y + 45}, 0.2, {ease: FlxEase.quintIn, onComplete: function(twn:FlxTween) {
+					updateportrait();
+					var mfwY = portrait.y;
+					portrait.y -= 20;
+					FlxTween.tween(portrait, {y: mfwY}, 0.4, {ease: FlxEase.elasticOut});
+				}});
+			}
+			else
+				updateportrait();
 	}
+
 
 	private function positionHighscore() {
 		scoreText.x = FlxG.width - scoreText.width - 6;
@@ -668,6 +695,39 @@ class FreeplayState extends MusicBeatState
 		scoreBG.x = FlxG.width - (scoreBG.scale.x / 2);
 		diffText.x = Std.int(scoreBG.x + (scoreBG.width / 2));
 		diffText.x -= diffText.width / 2;
+	}
+	private function updateportrait() {
+		portrait.loadGraphic(Paths.image('freeplayportraits/'+songs[curSelected].songName.toLowerCase()));
+		portrait.scale.set(0.5,0.5);
+		portrait.updateHitbox();
+		portrait.screenCenter(XY);
+
+	var _drawDistance:Int = 4;
+	var _lastVisibles:Array<Int> = [];
+	}public function updateTexts(elapsed:Float = 0.0)
+	
+
+	{
+		lerpSelected = FlxMath.lerp(lerpSelected, curSelected, FlxMath.bound(elapsed * 9.6, 0, 1));
+		for (i in _lastVisibles)
+		{
+			grpSongs.members[i].visible = grpSongs.members[i].active = false;
+			iconArray[i].visible = iconArray[i].active = false;
+		}
+		_lastVisibles = [];
+
+		var min:Int = Math.round(Math.max(0, Math.min(songs.length, lerpSelected - _drawDistance)));
+		var max:Int = Math.round(Math.max(0, Math.min(songs.length, lerpSelected + _drawDistance)));
+		for (i in min...max)
+		{
+			var item:Alphabet = grpSongs.members[i];
+			item.visible = item.active = true;
+			item.y = ((item.targetY - lerpSelected) * 1.3 * item.distancePerItem.y) + item.startPosition.y;
+
+			var icon:HealthIcon = iconArray[i];
+			icon.visible = icon.active = true;
+			_lastVisibles.push(i);
+		}
 	}
 
 	var _drawDistance:Int = 4;
