@@ -15,12 +15,12 @@ jobs:
           - name: Windows x64
             os: windows-2022
             buildArgs: "windows -final -X64 -D HXCPP_X64 -D 64bits"
-            artifactName: Windows x64
+            artifactName: Windows-x64
             artifactPath: export/64bits/release/windows/bin/*
           - name: Windows x32
             os: windows-2022
             buildArgs: "windows -final -X32 -D HXCPP_X32 -D 32bits"
-            artifactName: Windows x32
+            artifactName: Windows-x32
             artifactPath: export/32bits/release/windows/bin/*
           - name: Linux
             os: ubuntu-22.04
@@ -64,7 +64,7 @@ jobs:
       - name: Zip Windows x64 Build For Release
         run: |
           cd /home/runner/Windows-x64
-          zip -r "/home/runner/${{ env.PROJECT_NAME }}-Windows-x64.zip" .
+          zip -r "/home/runner/${{ env.PROJECT_NAME }}-Windows-x64.zip" "Windows-x64-release.zip" .
 
       - name: Download Windows x32 Build
         uses: actions/download-artifact@main
@@ -75,7 +75,7 @@ jobs:
       - name: Zip Windows x32 Build For Release
         run: |
           cd /home/runner/Windows-x32
-          zip -r "/home/runner/${{ env.PROJECT_NAME }}-Windows-x32.zip" .
+          zip -r "/home/runner/${{ env.PROJECT_NAME }}-Windows-x32.zip" "Windows-x32-release.zip".
 
       - name: Download Linux Build
         uses: actions/download-artifact@main
@@ -86,7 +86,7 @@ jobs:
       - name: Tar Linux Build For Release
         run: |
           cd /home/runner/Linux
-          tar czf "/home/runner/${{ env.PROJECT_NAME }}-Linux.tar" .
+          tar czf "/home/runner/${{ env.PROJECT_NAME }}-Linux.tar" "Linux-release.tar".
 
       - name: Download MacOS Build
         uses: actions/download-artifact@main
@@ -97,7 +97,7 @@ jobs:
       - name: Tar MacOS Build For Release
         run: |
           cd /home/runner/MacOS
-          tar czf "/home/runner/${{ env.PROJECT_NAME }}-MacOS.tar" .
+          tar czf "/home/runner/${{ env.PROJECT_NAME }}-MacOS.tar" "MacOS-release.tar".
 
       - name: Download Android Build
         uses: actions/download-artifact@main
@@ -106,7 +106,7 @@ jobs:
           path: /home/runner
 
       - name: Move Android File
-        run: mv /home/runner/${{ env.PROJECT_NAME }}-release.apk /home/runner/${{ env.PROJECT_NAME }}-Android.apk
+        run: mv /home/runner/${{ env.PROJECT_NAME }}-release.apk /home/runner/${{ env.PROJECT_NAME }}-Android-release.apk
 
       - name: Download iOS Build
         uses: actions/download-artifact@main
@@ -115,7 +115,7 @@ jobs:
           path: ${{ github.workspace }}
 
       - name: Move iOS File
-        run: mv ${{ github.workspace }}/${{ env.PROJECT_NAME }}.ipa /home/runner/${{ env.PROJECT_NAME }}-iOS.ipa
+        run: mv ${{ github.workspace }}/${{ env.PROJECT_NAME }}.ipa /home/runner/${{ env.PROJECT_NAME }}-iOS-release.ipa
 
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v4
