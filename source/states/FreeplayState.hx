@@ -26,6 +26,8 @@ class FreeplayState extends MusicBeatState
 	private static var lastDifficultyName:String = Difficulty.getDefault();
 
 	var scoreBG:FlxSprite;
+	var portrait:FlxSprite;
+	var portraitOverlay:FlxSprite;
 	var scoreText:FlxText;
 	var diffText:FlxText;
 	var lerpScore:Int = 0;
