@@ -118,22 +118,22 @@ jobs:
       - name: Move Android File
         run: mv /home/runner/${{ env.PROJECT_NAME }}-release.apk /home/runner/${{ env.PROJECT_NAME }}-Android-release.apk
 
-      - name: Download Android Build
+      - name: Download Android-ARM64 Build
         uses: actions/download-artifact@main
         with:
-          name: Android-ARM-64
+          name: Android-ARM64
           path: /home/runner
 
-      - name: Move Android File
+      - name: Move Android-ARM64 File
         run: mv /home/runner/${{ env.PROJECT_NAME }}-release.apk /home/runner/${{ env.PROJECT_NAME }}-Android-ARM64-release.apk
 
-      - name: Download Android Build
+      - name: Download Android-x86-64 Build
         uses: actions/download-artifact@main
         with:
           name: Android-x86-64
           path: /home/runner
 
-      - name: Move Android File
+      - name: Move Android-x86-64 File
         run: mv /home/runner/${{ env.PROJECT_NAME }}-release.apk /home/runner/${{ env.PROJECT_NAME }}-Android-x86-64-release.apk
 
       - name: Download iOS Build
