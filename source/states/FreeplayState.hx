@@ -110,54 +110,26 @@ class FreeplayState extends MusicBeatState
         {
             var songText:Alphabet = new Alphabet(0, 320, songs[i].songName, true);
 
-            songText.isMenuItem = false; <-- Add this here
-
-            songText.isMenuItemCenter = true; <-- Add this here
-
-            songText.targetY = i;
-
-           
+            songText.isMenuItem = false;
+            songText.isMenuItemCenter = true;
+            
+			songText.targetY = i;
 
             grpSongs.add(songText);
 
-
-            //songText.x = FlxG.width/2 - (songText.width+150)/2; <-- Comment this out
-
             songText.scaleX = Math.min(1, 980 / songText.width);
 
-            //songText.snapToPosition(); <-- Comment this out
-
-
             Mods.currentModDirectory = songs[i].folder;
-
-           
-
             var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
-
             icon.sprTracker = songText;
 
-
-           
-
-            // too laggy with a lot of songs, so i had to recode the logic for it
-
-            songText.visible = songText.active = false; <-- Remove "songText.isMenuItem" here
+            songText.visible = songText.active = false;
 
             icon.visible = icon.active = false;
-
-
-            // using a FlxGroup is too much fuss!
 
             iconArray.push(icon);
 
             add(icon);
-
-
-            //songText.x += 40;
-
-            // DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
-
-            //songText.screenCenter(X);
 
         }
 		
